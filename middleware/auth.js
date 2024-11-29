@@ -6,11 +6,13 @@ const User = require('../models/userSchema')
 const isAuthentiated = async(req,res,next)=>{
     
     const {token} = req.cookies
+    const jwtSecret = process.env.JWT_SECRET;
+
     if(!token){
         const error = Error('Login First to access the link');error.code=401;return next(error)
     }
 
-    const decoded = jwt.verify(token,'DEDEJIDSDSFEFDSC84511812CDC');
+    const decoded = jwt.verify(token,jwtSecret);
     req.user = await User.findById(decoded.id);
     // console.log(decoded.id)
     next();
